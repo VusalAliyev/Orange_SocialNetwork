@@ -12,8 +12,8 @@ namespace SocialNetwork.Domain.Entites
         public string ContentText { get; set; }
         public string ContentPhoto { get; set; }
 
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public string UserId { get; set; }
+        public AppUser User { get; set; }
 
         public IEnumerable<Comment> Comments { get; set; }
         public IEnumerable<Like> Likes { get; set; }

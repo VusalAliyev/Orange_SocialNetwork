@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+using SocialNetwork.Domain.Entites;
 using SocialNetwork.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddIdentity<AppUser, IdentityRole>(identityOptions =>
+{
+    identityOptions.Password.RequireDigit = true;
+    identityOptions.Password.RequiredLength = 8;
+    identityOptions.Password.RequireLowercase = true;
+    identityOptions.Password.RequireUppercase = true;
+    identityOptions.Password.RequireNonAlphanumeric = true;
+    identityOptions.User.RequireUniqueEmail = true;
+    identityOptions.Lockout.AllowedForNewUsers = true;
+    identityOptions.Lockout.MaxFailedAccessAttempts = 3;
+    identityOptions.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(30);
+}).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
 
 var app = builder.Build();
 
@@ -18,6 +32,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
