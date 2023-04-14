@@ -14,10 +14,12 @@ namespace SocialNetwork.API.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
         }
         [HttpGet]
         public IActionResult Login()
@@ -27,8 +29,8 @@ namespace SocialNetwork.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            AppUser user= await _userManager.FindByEmailAsync(loginDto.Email);
-            if (user==null)
+            AppUser user = await _userManager.FindByEmailAsync(loginDto.Email);
+            if (user == null)
             {
                 return BadRequest("invalid email or password");
             }
@@ -58,24 +60,42 @@ namespace SocialNetwork.API.Controllers
         {
             AppUser user = new AppUser
             {
-                FullName=registerDto.FullName,
-                Email=registerDto.Email,
-                UserName=registerDto.UserName
+                FullName = registerDto.FullName,
+                Email = registerDto.Email,
+                UserName = registerDto.UserName
             };
 
-            await _userManager.CreateAsync(user,registerDto.Password);
+            await _userManager.CreateAsync(user, registerDto.Password);
 
-            await _signInManager.SignInAsync(user, true);
+            await _userManager.AddToRoleAsync(user, "User");
+            await _signInManager.SignInAsync(user, false);
 
             return Ok(user);
         }
-        [HttpPost]    
-        
+        [HttpPost]
+
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
 
             return NoContent();
         }
+
+
+        #region CreateRole
+        //[HttpPost]
+        //public async Task CreateRole()
+        //{
+        //    if (!await _roleManager.RoleExistsAsync("Admin"))
+        //    {
+        //        await _roleManager.CreateAsync(new IdentityRole { Name = "Admin" });
+        //    }
+
+        //    if (!await _roleManager.RoleExistsAsync("User"))
+        //    {
+        //        await _roleManager.CreateAsync(new IdentityRole { Name = "User" });
+        //    }
+        //}
+        #endregion
     }
 }
