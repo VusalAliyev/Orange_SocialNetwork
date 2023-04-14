@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Domain.DTOs;
 using SocialNetwork.Domain.Entites;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace SocialNetwork.API.Controllers
 {
@@ -23,6 +24,29 @@ namespace SocialNetwork.API.Controllers
         {
             return Ok();
         }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            AppUser user= await _userManager.FindByEmailAsync(loginDto.Email);
+            if (user==null)
+            {
+                return BadRequest("invalid email or password");
+            }
+            SignInResult signInResult = await _signInManager.PasswordSignInAsync(user, loginDto.Password, false, true);
+
+            if (signInResult.IsLockedOut)
+            {
+                return BadRequest("that email account has been blocked");
+            }
+            if (!signInResult.Succeeded)
+            {
+                return BadRequest("invalid email or password");
+            }
+
+
+            return Ok("Logged in");
+        }
+
         [HttpGet]
         public IActionResult Register()
         {
@@ -45,7 +69,8 @@ namespace SocialNetwork.API.Controllers
 
             return Ok(user);
         }
-    
+        [HttpPost]    
+        
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
