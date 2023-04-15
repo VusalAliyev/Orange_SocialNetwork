@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using SocialNetwork.Application;
 using SocialNetwork.Domain.Entites;
 using SocialNetwork.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 builder.Services.AddIdentity<AppUser, IdentityRole>(identityOptions =>
 {
     identityOptions.Password.RequireDigit = true;
