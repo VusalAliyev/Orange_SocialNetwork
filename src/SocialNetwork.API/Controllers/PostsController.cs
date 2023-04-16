@@ -39,10 +39,10 @@ namespace SocialNetwork.API.Controllers
             return Ok(post);
         }
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> Post([FromRoute]DeletePostCommandRequest requestModel)
+        public async Task<IActionResult> Delete([FromRoute]DeletePostCommandRequest requestModel)
         {
             DeletePostCommandResponse post= await _mediator.Send(requestModel);
-            return Ok(post);
+            return Ok("Post Deleted");
         }
         [HttpPut]
         public async Task<IActionResult> Update([FromQuery] UpdatePostCommandRequest requestModel)
