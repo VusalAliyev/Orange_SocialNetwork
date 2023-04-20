@@ -16,8 +16,7 @@ namespace SocialNetwork.UI.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var data = await _apiService.GetAsync<List<GetAllPostQueryResponse>>("api/Posts");
-            
+            var data = await _apiService.GetAsync<List<Post>>("api/Posts");
 
             return View(data);
         }

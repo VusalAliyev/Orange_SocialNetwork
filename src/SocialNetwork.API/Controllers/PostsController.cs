@@ -6,6 +6,7 @@ using SocialNetwork.Application.Features.Commands.Post.DeletePost;
 using SocialNetwork.Application.Features.Commands.Post.UpdatePost;
 using SocialNetwork.Application.Features.Queries.Post.GetAllPost;
 using SocialNetwork.Application.Features.Queries.Post.GetPostById;
+using SocialNetwork.Domain.Entites;
 
 namespace SocialNetwork.API.Controllers
 {
@@ -14,7 +15,6 @@ namespace SocialNetwork.API.Controllers
     public class PostsController : ControllerBase
     {
         private readonly IMediator _mediator;
-
         public PostsController(IMediator mediator)
         {
             _mediator = mediator;
@@ -24,6 +24,7 @@ namespace SocialNetwork.API.Controllers
         public async Task<IActionResult> GetAll([FromQuery] GetAllPostQueryRequest requestModel)
         {
             List<GetAllPostQueryResponse> posts = await _mediator.Send(requestModel);
+
             return Ok(posts);
         }
         [HttpGet("{Id}")]
