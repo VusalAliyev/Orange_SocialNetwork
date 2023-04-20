@@ -1,0 +1,15 @@
+﻿@using SocialNetwork.Domain.Entites;
+@model ICollection<Post>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<ul>
+
+@foreach (var post in Model)
+{
+    <li>@post.ContentText</li>
+}
+</ul>
+
