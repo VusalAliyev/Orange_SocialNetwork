@@ -10,7 +10,14 @@
 		$(target).slideToggle();
 		$($prevTartget).slideUp();
 		
-    });
+	});
+
+
+	$('#callApi').click(function () {
+		$.ajax({
+			console.log("clicked")
+		})
+	});
 
 	//Close When Click Outside
 	$('body').on('click', function(e){
@@ -204,4 +211,6 @@
 	});
     
 })(jQuery);
+
+
 

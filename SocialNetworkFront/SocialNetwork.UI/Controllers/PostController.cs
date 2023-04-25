@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SocialNetwork.Application.Features.Commands.Post.CreatePost;
 using SocialNetwork.Application.Features.Queries.Post.GetAllPost;
 using SocialNetwork.Domain.Entites;
 using SocialNetwork.UI.Services.Interfaces;
@@ -7,18 +8,43 @@ namespace SocialNetwork.UI.Controllers
 {
     public class PostController : Controller
     {
-        private readonly IApiService _apiService;
+        private readonly IPostService _postService;
 
-        public PostController(IApiService apiService)
+        public PostController(IPostService postService)
         {
-            _apiService = apiService;
+            _postService = postService;
         }
+
 
         public async Task<IActionResult> Index()
         {
-            var data = await _apiService.GetAsync<List<Post>>("api/Posts");
+            List<Post> posts;
 
-            return View(data);
+            try
+            {
+                posts = await _postService.GetAll();
+            }
+            catch (Exception)
+            {
+                throw new NullReferenceException();
+            }
+
+            return View(posts);
         }
+
+           
+        public async Task<IActionResult> AddPost()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPost(CreatePostCommandRequest createPostCommandRequest)
+        {
+            _postService.CreatePost(createPostCommandRequest);
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

@@ -282,7 +282,7 @@
                     </a>
                 </div>
                 <div class="mobile-menu w-100">
-                    <ul style="text-align:right;">
+                    <ul>
                         <li>
                             <button class="notification request-trigger">
                                 <i class="flaticon-users"></i>
@@ -475,7 +475,7 @@
                                         </a>
                                     </figure>
                                     <div class="profile-desc text-center">
-                                        <h6 class="author"><a href="profile.html">Erik Jhonson</a></h6>
+                                        <h6 class="author"><a href="profile.html">Vusal Aliyev</a></h6>
                                         <p>Any one can join with but Social network us if you want Any one can join with us if you want</p>
                                     </div>
                                 </div>
@@ -694,11 +694,11 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body custom-scroll">
-                                                <textarea name="share" class="share-field-big custom-scroll" placeholder="Say Something"></textarea>
+                                                <textarea name="share" class="share-field-big custom-scroll" id="modalInput" placeholder="Say Something"></textarea>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="post-share-btn" data-bs-dismiss="modal">cancel</button>
-                                                <button type="button" class="post-share-btn">post</button>
+                                                <button type="button" id="callApi" class="post-share-btn">post</button>
                                             </div>
                                         </div>
                                     </div>
@@ -778,6 +778,8 @@
                         </div>
                         <!-- post status end -->
                         <!-- post status start -->
+                        @foreach (var post in Model)
+                        {
                         <div class="card">
                             <!-- post title start -->
                             <div class="post-title d-flex align-items-center">
@@ -812,8 +814,7 @@
                             <!-- post title start -->
                             <div class="post-content">
                                 <p class="post-desc pb-0">
-                                    Many desktop publishing packages and web page editors now use Lorem Ipsum as their
-                                    default model text, and a search for
+                                    @post.ContentText
                                 </p>
                                 <div class="post-meta">
                                     <button class="post-meta-like">
@@ -838,6 +839,7 @@
                                 </div>
                             </div>
                         </div>
+                        }
                         <!-- post status end -->
                         <!-- post status start -->
                         <div class="card">
@@ -1488,9 +1490,10 @@
     <div class="scroll-top not-visible">
         <i class="bi bi-finger-index"></i>
     </div>
+    
     <!-- Scroll to Top End -->
     <!-- footer area start -->
-    <footer class="d-none d-lg-block">
+   @* <footer class="d-none d-lg-block">
         <div class="footer-area reveal-footer">
             <div class="container-fluid">
                 <div class="row">
@@ -1856,7 +1859,7 @@
                 </div>
             </div>
         </div>
-    </footer>
+    </footer>*@
     <!-- footer area end -->
     <!-- footer area start -->
     <footer class="d-block d-lg-none">
@@ -1987,5 +1990,20 @@
     <script src="adda/assets/js/plugins/isotope.pkgd.min.js"></script>
     <!-- Main JS -->
     <script src="adda/assets/js/main.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('#callApi').click(function(){
+                var inputValue=$("modalInput").val();
+                $.ajax({
+                    type:"POST",
+                    url: "api/Posts",
+                    data: { : inputValue },
+                })
+                alert('Posted')
+            });
+        });
+    </script>
 
 </body>

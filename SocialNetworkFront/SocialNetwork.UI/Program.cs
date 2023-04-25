@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IApiService, ApiService>();
+builder.Services.AddScoped<IPostService, PostService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
