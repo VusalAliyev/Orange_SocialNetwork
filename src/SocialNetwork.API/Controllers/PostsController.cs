@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SocialNetwork.Application.Features.Commands.Post.CreatePost;
@@ -12,6 +13,7 @@ namespace SocialNetwork.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles="Admin")]
     public class PostsController : ControllerBase
     {
         private readonly IMediator _mediator;
